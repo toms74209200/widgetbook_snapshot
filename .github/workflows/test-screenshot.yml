@@ -1,0 +1,33 @@
+name: Screenshot test
+
+on:
+  workflow_call:
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: flutter-actions/setup-flutter@v3
+        with:
+          version: latest
+          channel: stable
+      - name: Install Flutter dependencies
+        working-directory: widgetbook_snapshot
+        run: flutter pub get
+      - name: Build Widgetbook web
+        run: make web
+      - name: Launch Widgetbook web
+        run: yes | npx serve widgetbook_snapshot/build/web &
+      - name: Install Playwright dependencies
+        run: bash .devcontainer/install-playwright.sh
+      - name: Run screenshot test
+        working-directory: e2etest
+        run: npm run test-e2e
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          path: e2etest/screenshots
