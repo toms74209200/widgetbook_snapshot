@@ -6,4 +6,4 @@ cd e2etest
 
 npm install
 
-yes | npx playwright install
+npx playwright install --with-deps

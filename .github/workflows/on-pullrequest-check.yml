@@ -1,0 +1,10 @@
+name: On Pull Request Check
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  screenshot:
+    uses: ./.github/workflows/test-screenshot.yml
